@@ -11,7 +11,7 @@
 
     <ion-content>
       <ion-list>
-        <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="contact in contacts | filter:val" type="item-text-wrap" href="#/tab/contacts/{{contact.card_id}}">
+        <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="contact in Contacts.allContacts | filter:val" type="item-text-wrap" href="#/tab/contacts/{{contact.card_id}}">
           <img ng-src="{{contact.card.picture_url}}">
           <h2>{{contact.card.first_name}} {{contact.card.last_name}}</h2>
           <p> {{contact.created_at}} </p>

@@ -80,7 +80,7 @@ angular.module('starter.services', [])
 
 .factory('Contacts', function($http) {
 
-  var contacts = [];
+  var allContacts = [];
 
     return {
 
@@ -88,12 +88,11 @@ angular.module('starter.services', [])
         return $http.get("https://link-us-back.herokuapp.com/users/" + userId + "/showlinksbyuser.json"). 
         //return $http.get("https://api-shows-tonight.herokuapp.com/shows.json").
         then(function(response){
-          contacts = response.data;
-          contacts = contacts.links;
-          console.log("contacts:" + JSON.stringify(contacts));
-          return contacts;
+            allContacts=response.data;
+            allContacts=allContacts.links;
+            return allContacts;
         }) 
-        },
+      },
                
       get: function(contactCardId) {
       for (var i = 0; i < contacts.length; i++) {
@@ -103,26 +102,7 @@ angular.module('starter.services', [])
       }
       return null;
        },
-      /*
-      getloca: function(contact) {
-            var loc = "";
-            geocoder = new google.maps.Geocoder();
-            var lat = 41.32;
-            var lng = 3.21;
-          
-    var latlng = new google.maps.LatLng(lat, lng);
-    geocoder.geocode({ 'latLng': latlng }, function (results, status) {
-                if (status == google.maps.GeocoderStatus.OK) {
-                    if (results[1]) {
-                       loc =  "Location: " + results[1].formatted_address;
-                        
-                    }
-                }
-            });
-            
-      return loc;
-      }
-      */
+      allContacts: allContacts,
     }
 })
 
@@ -162,32 +142,12 @@ angular.module('starter.services', [])
             console.log("good news" + cards_data[i].user_id);
           }
         }
-
-        console.log(cards);
         return cards;
       })
     },
-    /*
-    get: function(cardId) {
-      return $http.get("https://link-us-back.herokuapp.com/cards.json"). 
-      then(function(response){
-        cards_data = response.data;
-        cards_data = cards_data.cards;
-        for(var i = 0; i < cards_data.length; i++) {
-          if(cards_data[i].id===cardId) {
-            cards = cards_data[i];
-            return cards;
-          }
-        }
-        return null;
-      })
-    },
-    
-    */
     get: function(cardId) {
       for (var i = 0; i < cards.length; i++) {
         if (cards[i].id === parseInt(cardId)) {
-          console.log("lolilol" + cards[i].user_id)
           return cards[i];
         }
       }

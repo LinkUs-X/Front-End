@@ -106,7 +106,7 @@ angular.module('starter.controllers', [])
   }
 })
 
-.controller('LinkCtrl', function($scope, $stateParams, $ionicModal, Cards, logStatus, currentId, Links,$cordovaGeolocation) {
+.controller('LinkCtrl', function($http, $scope, $stateParams, $ionicModal, Cards, logStatus, currentId, Links,$cordovaGeolocation) {
 
   $scope.cards = [];
 
@@ -182,41 +182,50 @@ angular.module('starter.controllers', [])
       console.log(err);
     });
 
+    // ici, il faudrait qu'il y ait une boucle qui attende si pending, fermemodal() si success/error
     return Links.createlink(myCardId, userid, $scope.lati ,$scope.lng).
     then(function(response){
-      console.log(response);
-      $scope.closeModallinkus();
-    })
 
-    /*
-    .then(function(response) {
-      return 1;
-    })*/;
+      var temp = currentId.userId;
+      currentId.userId = 16;
+      currentId.userId = temp;
+      
+      var test = JSON.stringify($http.get("https://link-us-back.herokuapp.com/users/" + userid + "/verifylinkcreation.json"));
+      console.log("this is the test: " + test);
+      /*
+      while (test==="pending"){
+        test = JSON.stringify($http.get("https://link-us-back.herokuapp.com/users/" + userid + "/verifylinkcreation.json"));
+      }
+      if (test==="success"){
+        // success message, new link created
+
+        var temp = currentId.userId;
+        currentId.userId = 16;
+        currentId.userId = temp;
+      }
+      else{ //test==="error"
+        // error message
+
+      }
+
+      */
+      $scope.closeModallinkus();
+    });
 
   }
 })
 
 .controller('ContactsCtrl', function($scope, $stateParams, $ionicModal, Users, Cards, Contacts, logStatus, currentId) {
-  $scope.contacts = [];
-  // userId = currentId.userId; //localStorage.getItem('userid', response);
-  // userId = parseInt(localStrage.getItem('userid'));
-
+  
+  Contacts.all(currentId.userId);
+  $scope.Contacts = Contacts;
   /*
-    Contacts.all(userId) //checkuser returns the userId
-    .then(function(response) {
-        $scope.contacts = response;
-    })
-    */
-
   $scope.logStatus = logStatus;
-
   $scope.currentId = currentId;
   $scope.userid = currentId.userId;
 
   $scope.$watch('currentId.userId', function (newVal, oldVal, scope) {
     if(newVal) {
-      console.log("hey" + newVal);
-
       $scope.userid = newVal;
       Contacts.all(newVal) //checkuser returns the userId
         .then(function(response) {
@@ -224,6 +233,7 @@ angular.module('starter.controllers', [])
       })
     }
   });
+  */
 
 })
 
@@ -276,7 +286,6 @@ angular.module('starter.controllers', [])
     return Cards.createcard(card_name, first_name, last_name, phone_nbr, facebook_link,
                             linkedin_link, email, street, city, postal_code, country, description, picture_url, userId)
       .then(function(response) {
-      console.log("Card", card);
       $scope.closeModalcreatecard();
 
       $scope.$watch('currentId.userId', function (newVal, oldVal, scope) { // modification de currrentId.userId -> appelle le callback function
